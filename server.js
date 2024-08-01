@@ -51,20 +51,32 @@ app.get('/collectibles/:index', function(req, res){
 
 app.get('/shoes', function(req, res){
 
-  let filteredShoes = shoes.filter((shoe)=>{
-    if(shoe.price > req.query.minPrice){
-      return shoe;
-    }else if(shoe.price < req.query.maxPrice){
-      return shoe;
-    }else if(shoe.type === req.query.type){
-      return shoe;
-    } else{
-      res.send(shoes);
-    }
-  })
-  res.send(filteredShoes);
+const minPrice = req.query['min-price']? req.query['min-price']:0;
+const maxPrice = req.query['max-price']? req.query['max-price']: Infinity;
+const type = req.query.type ? req.query.type: '';
 
+let filteredShoes = shoes.filter((shoe)=>{
+  return shoe.price >= minPrice && shoe.price <= maxPrice && shoe.type.includes(type)
 })
+  res.send(filteredShoes);
+})  
+
+  /* app.get('/shoes', function(req, res){
+
+    let filteredShoes = shoes.filter((shoe)=>{
+      if(shoe.price > req.query.minPrice){
+        return shoe;
+      }else if(shoe.price < req.query.maxPrice){
+        return shoe;
+      }else if(shoe.type === req.query.type){
+        return shoe;
+      } else{
+        res.send(shoes);
+      }
+    })ß
+    res.send(filteredShoes);
+  
+  }) */
 
 // tell the app to listen on port 3000
 
